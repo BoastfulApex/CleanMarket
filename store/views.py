@@ -88,10 +88,10 @@ class ProductView(viewsets.ModelViewSet):
                 "message": [str(exx)]
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # def get_page_url(self, page_number):
-    #     if page_number < 1:
-    #         return None
-    #     return reverse('product-list') + f'?page={page_number}'
+    def get_page_url(self, page_number):
+        if page_number < 1:
+            return None
+        return reverse('product-list') + f'?page={page_number}'
 
 
 class TopProductView(viewsets.ModelViewSet):
