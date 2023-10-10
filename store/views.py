@@ -4,6 +4,8 @@ from rest_framework import filters, status
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
+
 
 class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -44,6 +46,12 @@ class ProductView(viewsets.ModelViewSet):
 
         return queryset
 
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        slug = self.kwargs.get('pk')
+        obj = get_object_or_404(queryset, slug=slug)
+        return obj
+
     def list(self, request, *args, **kwargs):
         try:
             page = int(request.query_params.get('page', 1))
@@ -80,10 +88,10 @@ class ProductView(viewsets.ModelViewSet):
                 "message": [str(exx)]
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get_page_url(self, page_number):
-        if page_number < 1:
-            return None
-        return reverse('product-list') + f'?page={page_number}'
+    # def get_page_url(self, page_number):
+    #     if page_number < 1:
+    #         return None
+    #     return reverse('product-list') + f'?page={page_number}'
 
 
 class TopProductView(viewsets.ModelViewSet):
@@ -109,4 +117,9 @@ class FAQView(viewsets.ModelViewSet):
 class NewsView(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        slug = self.kwargs.get('slug')  # Retrieve the slug from the URL
+        return get_object_or_404(queryset, slug=slug)
 

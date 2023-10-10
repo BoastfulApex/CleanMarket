@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class Category(models.Model):
@@ -32,6 +33,7 @@ class Product(models.Model):
     name_uz = models.CharField(max_length=200, null=True, blank=True)
     name_ru = models.CharField(max_length=200, null=True, blank=True)
     name_en = models.CharField(max_length=200, null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
     description_uz = models.TextField(max_length=2000, null=True, blank=True)
     description_ru = models.TextField(max_length=2000, null=True, blank=True)
     description_en = models.TextField(max_length=2000, null=True, blank=True)
@@ -48,6 +50,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name_uz
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name_uz)
+        super().save(*args, **kwargs)
 
 
 class About(models.Model):
