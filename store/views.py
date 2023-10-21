@@ -52,46 +52,46 @@ class ProductView(viewsets.ModelViewSet):
         obj = get_object_or_404(queryset, slug=slug)
         return obj
 
-    # def list(self, request, *args, **kwargs):
-    #     try:
-    #         page = int(request.query_params.get('page', 1))
-    #         page_size = int(request.query_params.get('page_size', 10))
-    #         page_size = max(1, min(page_size, 100))  # Ensure page_size is between 1 and 100
-    #
-    #         queryset = self.get_queryset()
-    #         total_items = queryset.count()
-    #         max_page = (total_items + page_size - 1) // page_size
-    #
-    #         if page > max_page:
-    #             page = max_page
-    #
-    #         paginator = Paginator(queryset, page_size)
-    #         paginated_queryset = paginator.get_page(page)
-    #
-    #         serializer = ProductSerializer(paginated_queryset, many=True)
-    #
-    #         data = {
-    #             'page': page,
-    #             'max_page': max_page,
-    #             'previous_page': self.get_page_url(page - 1) if page > 1 else None,
-    #             'next_page': self.get_page_url(page + 1) if page < max_page else None,
-    #             'results': serializer.data
-    #         }
-    #
-    #         return Response(data)
-    #
-    #     except Exception as exx:
-    #         return Response({
-    #             "status": True,
-    #             "code": 500,
-    #             "data": [],
-    #             "message": [str(exx)]
-    #         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    #
-    # def get_page_url(self, page_number):
-    #     if page_number < 1:
-    #         return None
-    #     return reverse('product-list') + f'?page={page_number}'
+    def list(self, request, *args, **kwargs):
+        try:
+            page = int(request.query_params.get('page', 1))
+            page_size = int(request.query_params.get('page_size', 10))
+            page_size = max(1, min(page_size, 100))  # Ensure page_size is between 1 and 100
+
+            queryset = self.get_queryset()
+            total_items = queryset.count()
+            max_page = (total_items + page_size - 1) // page_size
+
+            if page > max_page:
+                page = max_page
+
+            paginator = Paginator(queryset, page_size)
+            paginated_queryset = paginator.get_page(page)
+
+            serializer = ProductSerializer(paginated_queryset, many=True)
+
+            data = {
+                'page': page,
+                'max_page': max_page,
+                'previous_page': self.get_page_url(page - 1) if page > 1 else None,
+                'next_page': self.get_page_url(page + 1) if page < max_page else None,
+                'results': serializer.data
+            }
+
+            return Response(data)
+
+        except Exception as exx:
+            return Response({
+                "status": True,
+                "code": 500,
+                "data": [],
+                "message": [str(exx)]
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get_page_url(self, page_number):
+        if page_number < 1:
+            return None
+        return reverse('product-list') + f'?page={page_number}'
 
 
 class TopProductView(viewsets.ModelViewSet):

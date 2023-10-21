@@ -10,9 +10,16 @@ class Category(models.Model):
     description_ru = models.TextField(max_length=2000, null=True, blank=True)
     description_en = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+    icon = models.FileField(null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
         return self.name_uz
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name_uz)
+        super().save(*args, **kwargs)
 
 
 class SubCategory(models.Model):
@@ -23,10 +30,17 @@ class SubCategory(models.Model):
     description_ru = models.TextField(max_length=2000, null=True, blank=True)
     description_en = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+    icon = models.FileField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
         return self.name_uz
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name_uz)
+        super().save(*args, **kwargs)
 
 
 class Product(models.Model):
@@ -37,6 +51,9 @@ class Product(models.Model):
     description_uz = models.TextField(max_length=2000, null=True, blank=True)
     description_ru = models.TextField(max_length=2000, null=True, blank=True)
     description_en = models.TextField(max_length=2000, null=True, blank=True)
+    text_uz = models.TextField(max_length=2000, null=True, blank=True)
+    text_ru = models.TextField(max_length=2000, null=True, blank=True)
+    text_en = models.TextField(max_length=2000, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True)
     image1 = models.ImageField(null=True, blank=True)
