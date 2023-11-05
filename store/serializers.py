@@ -38,3 +38,9 @@ class FAQSerializer(serializers.ModelSerializer):
         model = About
         fields = "__all__"
 
+
+class PartnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partner
+        fields = "__all__"
+

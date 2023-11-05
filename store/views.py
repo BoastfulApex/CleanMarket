@@ -123,3 +123,7 @@ class NewsView(viewsets.ModelViewSet):
         slug = self.kwargs.get('slug')  # Retrieve the slug from the URL
         return get_object_or_404(queryset, slug=slug)
 
+
+class PartnerView(viewsets.ModelViewSet):
+    queryset = Partner.objects.all()
+    serializer_class = PartnerSerializer

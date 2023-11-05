@@ -110,3 +110,7 @@ class FAQ(models.Model):
     answer_en = models.TextField(max_length=20000, null=True, blank=True)
 
 
+class Partner(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
+
