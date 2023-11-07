@@ -3,6 +3,7 @@ from .serializers import *
 from rest_framework import filters, status
 from rest_framework.response import Response
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
@@ -29,13 +30,12 @@ class SubCategoryView(viewsets.ModelViewSet):
 class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name_uz', 'name_ru', 'name_en']
 
     def get_queryset(self):
         queryset = Product.objects.all().order_by('id')
 
         category_id = self.request.GET.get('category_id')
+        search_query = self.request.GET.get('search')
         subcategory_id = self.request.GET.get('subcategory_id')
 
         if category_id:
@@ -43,6 +43,12 @@ class ProductView(viewsets.ModelViewSet):
 
         if subcategory_id:
             queryset = queryset.filter(sub_category_id=subcategory_id)
+        if search_query:
+            queryset = queryset.filter(
+                Q(name_uz__icontains=search_query) |
+                Q(name_ru__icontains=search_query) |
+                Q(name_en__icontains=search_query)
+            )
 
         return queryset
 
