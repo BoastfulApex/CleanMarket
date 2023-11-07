@@ -55,11 +55,17 @@ class ProductView(viewsets.ModelViewSet):
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         slug = self.kwargs.get('pk')
-        obj = get_object_or_404(queryset, slug=slug)
-        if not obj:
-            obj = get_object_or_404(queryset, id=slug)
-        return obj
 
+        # First, try to retrieve by slug
+        obj = get_object_or_404(queryset, slug=slug)
+
+        if not obj:
+            # If not found, check if pk (slug) is an integer and try to retrieve by id
+            if slug.isdigit():
+                obj = get_object_or_404(queryset, id=slug)
+
+        return obj
+    
     def list(self, request, *args, **kwargs):
         try:
             page = int(request.query_params.get('page', 1))
