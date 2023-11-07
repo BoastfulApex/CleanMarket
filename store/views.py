@@ -91,7 +91,7 @@ class ProductView(viewsets.ModelViewSet):
     def get_page_url(self, page_number):
         if page_number < 1:
             return None
-        return reverse('products') + f'?page={page_number}'
+        return reverse('api/products') + f'?page={page_number}'
 
 
 class TopProductView(viewsets.ModelViewSet):
