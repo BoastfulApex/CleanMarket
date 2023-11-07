@@ -56,6 +56,8 @@ class ProductView(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         slug = self.kwargs.get('pk')
         obj = get_object_or_404(queryset, slug=slug)
+        if not obj:
+            obj = get_object_or_404(queryset, id=slug)
         return obj
 
     def list(self, request, *args, **kwargs):
