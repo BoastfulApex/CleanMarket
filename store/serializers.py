@@ -35,7 +35,7 @@ class NewsSerializer(serializers.ModelSerializer):
 
 class FAQSerializer(serializers.ModelSerializer):
     class Meta:
-        model = About
+        model = FAQ
         fields = "__all__"
 
 
