@@ -53,7 +53,7 @@ class ProductView(viewsets.ModelViewSet):
         return obj
 
     def list(self, request, *args, **kwargs):
-        # try:
+        try:
             page = int(request.query_params.get('page', 1))
             page_size = int(request.query_params.get('page_size', 10))
             page_size = max(1, min(page_size, 100))  # Ensure page_size is between 1 and 100
@@ -80,18 +80,18 @@ class ProductView(viewsets.ModelViewSet):
 
             return Response(data)
 
-        # except Exception as exx:
-        #     return Response({
-        #         "status": True,
-        #         "code": 500,
-        #         "data": [],
-        #         "message": [str(exx)]
-        #     }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as exx:
+            return Response({
+                "status": True,
+                "code": 500,
+                "data": [],
+                "message": [str(exx)]
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get_page_url(self, page_number):
         if page_number < 1:
             return None
-        return reverse('product-list') + f'?page={page_number}'
+        return reverse('products') + f'?page={page_number}'
 
 
 class TopProductView(viewsets.ModelViewSet):
