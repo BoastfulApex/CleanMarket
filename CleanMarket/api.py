@@ -11,4 +11,5 @@ router.register('about', AboutView, basename='about')
 router.register('news', NewsView, basename='news')
 router.register('faq', FAQView, basename='faq')
 router.register('partner', PartnerView, basename='partner')
+router.register('products_id', ProductsIdPost, basename='products_id')
 

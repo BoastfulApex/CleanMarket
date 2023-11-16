@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from .settings import *
 from django.conf.urls.static import static
-from .api import router
+from .api import *
 
 
 urlpatterns = [

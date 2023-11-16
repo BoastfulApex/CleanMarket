@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
 
 
 class CategoryView(viewsets.ModelViewSet):
@@ -52,20 +53,21 @@ class ProductView(viewsets.ModelViewSet):
 
         return queryset
 
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
-        slug = self.kwargs.get('pk')
+    # def get_object(self):
+    #     queryset = self.filter_queryset(self.get_queryset())
+    #     slug = self.kwargs.get('pk')
+    #
+    #     # First, try to retrieve by slug
+    #     obj = get_object_or_404(queryset, slug=slug)
+    #
+    #     if obj:
+    #         print('AAA')
+    #         return obj
+    #     else:
+    #         print(slug)
+    #         obj = get_object_or_404(queryset, id=slug)
+    #         return obj
 
-        # First, try to retrieve by slug
-        obj = get_object_or_404(queryset, slug=slug)
-
-        if not obj:
-            # If not found, check if pk (slug) is an integer and try to retrieve by id
-            if slug.isdigit():
-                obj = get_object_or_404(queryset, id=slug)
-
-        return obj
-    
     def list(self, request, *args, **kwargs):
         try:
             page = int(request.query_params.get('page', 1))
@@ -141,3 +143,19 @@ class NewsView(viewsets.ModelViewSet):
 class PartnerView(viewsets.ModelViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
+
+
+class ProductsIdPost(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def create(self, request, *args, **kwargs):
+        product_ids = request.data.get('product_ids', [])
+
+        if not product_ids:
+            return Response({'error': 'No product_ids provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        products = Product.objects.filter(id__in=product_ids)
+        serializer = ProductSerializer(products, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
