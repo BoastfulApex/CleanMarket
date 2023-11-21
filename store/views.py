@@ -53,20 +53,20 @@ class ProductView(viewsets.ModelViewSet):
 
         return queryset
 
-    # def get_object(self):
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #     slug = self.kwargs.get('pk')
-    #
-    #     # First, try to retrieve by slug
-    #     obj = get_object_or_404(queryset, slug=slug)
-    #
-    #     if obj:
-    #         print('AAA')
-    #         return obj
-    #     else:
-    #         print(slug)
-    #         obj = get_object_or_404(queryset, id=slug)
-    #         return obj
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        slug = self.kwargs.get('pk')
+
+        # First, try to retrieve by slug
+        obj = get_object_or_404(queryset, slug=slug)
+
+        if obj:
+            print('AAA')
+            return obj
+        else:
+            print(slug)
+            obj = get_object_or_404(queryset, id=slug)
+            return obj
 
     def list(self, request, *args, **kwargs):
         try:
