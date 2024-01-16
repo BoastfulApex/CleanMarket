@@ -44,3 +44,15 @@ class PartnerSerializer(serializers.ModelSerializer):
         model = Partner
         fields = "__all__"
 
+
+class SliderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Slider
+        fields = "__all__"
+
+
+class WhyUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhyUs
+        fields = "__all__"
+

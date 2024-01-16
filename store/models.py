@@ -114,3 +114,12 @@ class Partner(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
 
+
+class Slider(models.Model):
+    image = models.ImageField(null=True, blank=True)
+
+
+class WhyUs(models.Model):
+    image = models.ImageField(null=True, blank=True)
+
+

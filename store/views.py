@@ -159,3 +159,14 @@ class ProductsIdPost(viewsets.ModelViewSet):
         serializer = ProductSerializer(products, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SliderView(viewsets.ModelViewSet):
+    queryset = Slider.objects.all()
+    serializer_class = SliderSerializer
+
+
+class WhyUsView(viewsets.ModelViewSet):
+    queryset = WhyUs.objects.all()
+    serializer_class = WhyUsSerializer
+
