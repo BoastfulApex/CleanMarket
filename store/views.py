@@ -28,6 +28,34 @@ class SubCategoryView(viewsets.ModelViewSet):
         return queryset
 
 
+def generate_unique_slug(slug, index):
+    """
+    Generate a unique slug by appending a numerical index.
+    """
+    return f"{slug}-{index}"
+
+
+def ensure_unique_slugs():
+    """
+    Ensure that all products have unique slugs.
+    """
+    all_products = Product.objects.all()  # Fetch all products from the database
+
+    slug_counts = {}  # Keep track of slug counts to ensure uniqueness
+
+    for product in all_products:
+        original_slug = product.slug
+        slug_counts.setdefault(original_slug, 0)
+
+        # Check if the slug already exists
+        if slug_counts[original_slug] > 0:
+            new_slug = generate_unique_slug(original_slug, slug_counts[original_slug])
+            product.slug = new_slug  # Set the new slug for the product
+
+        slug_counts[original_slug] += 1
+        product.save()
+
+
 class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -69,6 +97,7 @@ class ProductView(viewsets.ModelViewSet):
             return obj
 
     def list(self, request, *args, **kwargs):
+        ensure_unique_slugs()
         try:
             page = int(request.query_params.get('page', 1))
             page_size = int(request.query_params.get('page_size', 10))
@@ -169,4 +198,3 @@ class SliderView(viewsets.ModelViewSet):
 class WhyUsView(viewsets.ModelViewSet):
     queryset = WhyUs.objects.all()
     serializer_class = WhyUsSerializer
-
